@@ -7,218 +7,187 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
-    --bg: #f8f7f4;
-    --surface: #ffffff;
-    --border: #e2e0da;
-    --border-strong: #c8c4bc;
-    --text: #1a1a18;
-    --text-muted: #6b6860;
-    --accent: #1a4f8a;
-    --accent-light: #e8f0f8;
-    --success: #1a6b3a;
-    --success-light: #e8f5ee;
-    --warn: #7a4a00;
-    --warn-light: #fef3e2;
-    --danger: #7a1a1a;
-    --danger-light: #fdeaea;
-    --radius: 8px;
-    --radius-lg: 12px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --bg:#f8f7f4; --surface:#fff; --border:#e2e0da; --border-strong:#c8c4bc;
+    --text:#1a1a18; --text-muted:#6b6860; --accent:#1a4f8a; --accent-light:#e8f0f8;
+    --success:#1a6b3a; --success-light:#e8f5ee; --danger:#7a1a1a; --danger-light:#fdeaea;
+    --radius:8px; --radius-lg:12px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; font-size: 14px; background: var(--bg); color: var(--text); line-height: 1.5; }
-
-  .app-shell { display: flex; min-height: 100vh; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; font-size:14px; background:var(--bg); color:var(--text); line-height:1.5; }
+  .app-shell { display:flex; height:100vh; overflow:hidden; }
 
   /* SIDEBAR */
-  .sidebar { width: 280px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-  .sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
-  .sidebar-header h1 { font-size: 16px; font-weight: 600; color: var(--accent); letter-spacing: -0.3px; }
-  .sidebar-header p { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
-  .sidebar-section { padding: 16px 20px; border-bottom: 1px solid var(--border); }
-  .sidebar-section h2 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 10px; }
-
-  .chip-grid { display: flex; flex-wrap: wrap; gap: 5px; }
-  .chip { padding: 3px 9px; border: 1px solid var(--border-strong); border-radius: 20px; font-size: 11px; cursor: pointer; background: var(--surface); color: var(--text-muted); transition: all 0.12s; user-select: none; }
-  .chip:hover { border-color: var(--accent); color: var(--accent); }
-  .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
-
-  label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px; }
-  input[type=text], select { width: 100%; padding: 7px 10px; font-size: 13px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--surface); color: var(--text); font-family: inherit; }
-  input[type=text]:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,79,138,0.1); }
-  .field { margin-bottom: 10px; }
-
-  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 13px; font-weight: 500; border-radius: var(--radius); cursor: pointer; border: 1px solid transparent; font-family: inherit; transition: all 0.12s; white-space: nowrap; }
-  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); width: 100%; justify-content: center; }
-  .btn-primary:hover { background: #153d6e; }
-  .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
-  .btn-outline { background: var(--surface); color: var(--text); border-color: var(--border-strong); }
-  .btn-outline:hover { background: var(--bg); }
-  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .sidebar { width:270px; flex-shrink:0; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow-y:auto; }
+  .sidebar-header { padding:18px 20px 14px; border-bottom:1px solid var(--border); }
+  .sidebar-header h1 { font-size:15px; font-weight:600; color:var(--accent); }
+  .sidebar-header p { font-size:11px; color:var(--text-muted); margin-top:3px; }
+  .sidebar-section { padding:14px 20px; border-bottom:1px solid var(--border); }
+  .sidebar-section h2 { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); margin-bottom:9px; }
+  .chip-grid { display:flex; flex-wrap:wrap; gap:5px; }
+  .chip { padding:3px 9px; border:1px solid var(--border-strong); border-radius:20px; font-size:11px; cursor:pointer; background:var(--surface); color:var(--text-muted); transition:all .12s; user-select:none; }
+  .chip:hover { border-color:var(--accent); color:var(--accent); }
+  .chip.on { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:500; }
+  label { font-size:11px; color:var(--text-muted); display:block; margin-bottom:4px; }
+  input[type=text], select { width:100%; padding:7px 10px; font-size:13px; border:1px solid var(--border-strong); border-radius:var(--radius); background:var(--surface); color:var(--text); font-family:inherit; }
+  .field { margin-bottom:10px; }
+  .btn-search { width:100%; padding:9px; border:none; border-radius:var(--radius); background:var(--accent); color:#fff; font-weight:600; font-size:13px; cursor:pointer; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .btn-search:disabled { opacity:.45; cursor:not-allowed; }
+  .api-info { font-size:11px; color:var(--text-muted); padding:14px 20px; }
+  .api-info a { color:var(--accent); }
 
   /* MAIN */
-  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-  .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; position: sticky; top: 0; z-index: 10; }
-  .topbar-left { display: flex; align-items: center; gap: 10px; }
-  .topbar-right { display: flex; gap: 8px; }
-  .count-badge { font-size: 13px; color: var(--text-muted); }
-  .count-badge strong { color: var(--text); }
+  .main { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
+  .topbar { background:var(--surface); border-bottom:1px solid var(--border); padding:10px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; flex-shrink:0; }
+  .topbar-left { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .topbar-right { display:flex; gap:8px; }
+  .count-badge { font-size:13px; color:var(--text-muted); }
+  .count-badge strong { color:var(--text); }
 
-  .content { padding: 20px 24px; flex: 1; }
+  /* FILTER BUTTONS */
+  .filter-group { display:flex; gap:4px; }
+  .filter-btn { padding:4px 12px; font-size:12px; font-weight:500; border-radius:20px; cursor:pointer; border:1px solid var(--border-strong); background:var(--surface); color:var(--text-muted); font-family:inherit; transition:all .12s; }
+  .filter-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .filter-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .filter-btn.active-preprint { background:#d97706; border-color:#d97706; color:#fff; }
+  .filter-btn.active-journal { background:var(--success); border-color:var(--success); color:#fff; }
+
+  .btn-export { padding:5px 12px; font-size:12px; font-weight:500; border-radius:var(--radius); cursor:pointer; border:1px solid var(--border-strong); background:var(--surface); color:var(--text); font-family:inherit; }
+  .btn-export:hover { background:var(--bg); }
+
+  /* CONTENT SCROLL AREA */
+  .content { padding:16px 20px; flex:1; overflow-y:auto; }
 
   /* STATES */
-  .state-box { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-  .state-box svg { width: 48px; height: 48px; opacity: 0.2; margin-bottom: 12px; }
-  .state-box p { font-size: 13px; }
+  .progress { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px 24px; display:flex; align-items:center; gap:12px; }
+  .spinner { width:16px; height:16px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .info { background:var(--success-light); border:1px solid #9ad4b4; padding:9px 14px; border-radius:var(--radius); margin-bottom:12px; font-size:12px; color:var(--success); }
+  .error { background:var(--danger-light); border:1px solid #f1bcbc; color:var(--danger); padding:10px 14px; border-radius:var(--radius); font-size:13px; }
 
-  .progress, .progress-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; display: flex; align-items: center; gap: 12px; }
-  .spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  /* TABLE — no sticky header, scrolls with content */
+  .results-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .results-table th { background:#eef0f3; border:1px solid var(--border); padding:8px 10px; text-align:left; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-muted); white-space:nowrap; }
+  .results-table td { border:1px solid var(--border); padding:8px 10px; vertical-align:top; }
+  .results-table tr:hover td { background:var(--accent-light); }
 
-  .error-box { background: var(--danger-light); border: 1px solid #f5c6c6; border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--danger); }
-
-  /* RESULTS TABLE */
-  .results-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  .results-table th { background: var(--bg); border: 1px solid var(--border); padding: 8px 10px; text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); white-space: nowrap; position: sticky; top: 56px; z-index: 5; cursor: pointer; user-select: none; }
-  .results-table th:hover { background: #eee; }
-  .results-table td { border: 1px solid var(--border); padding: 8px 10px; vertical-align: top; }
-  .results-table tr:hover td { background: var(--accent-light); }
-
-  .badge { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 20px; font-weight: 500; white-space: nowrap; }
-  .badge-biorxiv { background: #fff3e0; color: #7a4500; border: 1px solid #f5c87a; }
-  .badge-medrxiv { background: #e8f0f8; color: #1a4f8a; border: 1px solid #9ab8d8; }
-  .badge-topic { background: var(--success-light); color: var(--success); border: 1px solid #9ad4b4; }
-
-  .title-cell { max-width: 380px; }
-  .title-link { color: var(--accent); text-decoration: none; font-weight: 500; line-height: 1.4; }
-  .title-link:hover { text-decoration: underline; }
-  .authors-cell { max-width: 200px; color: var(--text-muted); font-size: 11px; }
-  .corr-cell { max-width: 180px; font-size: 11px; }
-  .corr-cell a { color: var(--accent); text-decoration: none; }
-  .corr-cell a:hover { text-decoration: underline; }
-
-  .info-note { background: var(--warn-light); border: 1px solid #f5d87a; border-radius: var(--radius); padding: 10px 14px; font-size: 12px; color: var(--warn); margin-bottom: 14px; }
-
-  .api-info { font-size: 11px; color: var(--text-muted); padding: 16px 20px; }
-  .api-info a { color: var(--accent); }
-
-  select[multiple] { height: auto; min-height: 80px; }
+  .badge { display:inline-block; font-size:10px; padding:2px 8px; border-radius:20px; font-weight:500; white-space:nowrap; }
+  .badge-biorxiv { background:#fff3e0; color:#7a4500; border:1px solid #f5c87a; }
+  .badge-medrxiv { background:#e8f0f8; color:#1a4f8a; border:1px solid #9ab8d8; }
+  .badge-journal { background:#f2f2f2; color:#444; border:1px solid #ddd; }
+  .badge-topic { background:var(--success-light); color:var(--success); border:1px solid #9ad4b4; }
+  .title-link { color:var(--accent); text-decoration:none; font-weight:500; line-height:1.4; }
+  .title-link:hover { text-decoration:underline; }
 </style>
 </head>
 <body>
 <div class="app-shell">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <h1>🔬 DermPreprint Scout</h1>
-      <p>Europe PMC API · bioRxiv · medRxiv</p>
-    </div>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h1>🔬 DermPreprint Scout</h1>
+    <p>Europe PMC · Journals + Preprints</p>
+  </div>
 
-    <div class="sidebar-section">
-      <h2>Themen</h2>
-      <div class="chip-grid" id="topics">
-        <div class="chip on" data-val="psoriasis">Psoriasis</div>
-        <div class="chip on" data-val="melanoma">Melanom</div>
-        <div class="chip on" data-val="atopic dermatitis">Atop. Dermatitis</div>
-        <div class="chip" data-val="acne vulgaris">Akne</div>
-        <div class="chip" data-val="basal cell carcinoma skin">Basalzellkarzinom</div>
-        <div class="chip" data-val="rosacea skin">Rosacea</div>
-        <div class="chip" data-val="lichen planus">Lichen planus</div>
-        <div class="chip" data-val="pemphigus">Pemphigus</div>
-        <div class="chip" data-val="vitiligo">Vitiligo</div>
-        <div class="chip" data-val="skin microbiome">Hautmikrobiom</div>
-        <div class="chip" data-val="dermoscopy">Dermatoskopie</div>
-        <div class="chip" data-val="alopecia areata">Alopezie</div>
-        <div class="chip" data-val="hidradenitis suppurativa">Hidradenitis</div>
-        <div class="chip" data-val="urticaria skin">Urtikaria</div>
-        <div class="chip" data-val="cutaneous T-cell lymphoma">CTCL</div>
-        <div class="chip" data-val="squamous cell carcinoma skin">SCC</div>
-        <div class="chip" data-val="dupilumab">Dupilumab</div>
-        <div class="chip" data-val="JAK inhibitor dermatology">JAK-Inhibitor</div>
-        <div class="chip" data-val="skin barrier">Hautbarriere</div>
-        <div class="chip" data-val="photodynamic therapy skin">PDT</div>
+  <div class="sidebar-section">
+    <h2>Themen</h2>
+    <div class="chip-grid" id="topics">
+      <div class="chip on" data-val="psoriasis">Psoriasis</div>
+      <div class="chip on" data-val="melanoma">Melanom</div>
+      <div class="chip on" data-val="atopic dermatitis">Atop. Dermatitis</div>
+      <div class="chip" data-val="vitiligo">Vitiligo</div>
+      <div class="chip" data-val="hidradenitis suppurativa">Hidradenitis</div>
+      <div class="chip" data-val="alopecia areata">Alopezie</div>
+      <div class="chip" data-val="rosacea">Rosacea</div>
+      <div class="chip" data-val="acne vulgaris">Akne</div>
+      <div class="chip" data-val="basal cell carcinoma skin">Basalzellkarzinom</div>
+      <div class="chip" data-val="lichen planus">Lichen planus</div>
+      <div class="chip" data-val="pemphigus">Pemphigus</div>
+      <div class="chip" data-val="urticaria skin">Urtikaria</div>
+      <div class="chip" data-val="cutaneous T-cell lymphoma">CTCL</div>
+      <div class="chip" data-val="skin microbiome">Hautmikrobiom</div>
+      <div class="chip" data-val="dermoscopy">Dermatoskopie</div>
+      <div class="chip" data-val="dupilumab">Dupilumab</div>
+      <div class="chip" data-val="JAK inhibitor dermatology">JAK-Inhibitor</div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <h2>Freie Suche</h2>
+    <div class="field">
+      <label>Zusätzliche Begriffe (kommagetrennt)</label>
+      <input type="text" id="extra" placeholder="tralokinumab, GWAS, single-cell">
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <h2>Filter</h2>
+    <div class="field">
+      <label>Zeitraum</label>
+      <select id="days">
+        <option value="7">7 Tage</option>
+        <option value="30" selected>30 Tage</option>
+        <option value="90">90 Tage</option>
+        <option value="180">6 Monate</option>
+        <option value="365">1 Jahr</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Max. Ergebnisse</label>
+      <select id="maxres">
+        <option value="25">25</option>
+        <option value="50" selected>50</option>
+        <option value="100">100</option>
+        <option value="200">200</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <button class="btn-search" id="search-btn" onclick="runSearch()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Suche starten
+    </button>
+  </div>
+
+  <div class="api-info">
+    <strong>API:</strong> <a href="https://europepmc.org" target="_blank">Europe PMC</a><br>
+    Journals + Preprints (bioRxiv, medRxiv u.a.)
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="count-badge" id="count-badge">Noch keine Suche gestartet</span>
+      <div class="filter-group" id="filter-group" style="display:none">
+        <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">Alle</button>
+        <button class="filter-btn" data-filter="preprint" onclick="setFilter('preprint',this)">🔬 Nur Preprints</button>
+        <button class="filter-btn" data-filter="journal" onclick="setFilter('journal',this)">📄 Nur Journals</button>
       </div>
     </div>
-
-    <div class="sidebar-section">
-      <h2>Freie Suche</h2>
-      <div class="field">
-        <label>Zusätzliche Begriffe (kommagetrennt)</label>
-        <input type="text" id="extra" placeholder="z.B. tralokinumab, GWAS, single-cell">
-      </div>
+    <div class="topbar-right">
+      <button class="btn-export" id="export-btn" onclick="exportXLSX()" style="display:none">📥 Excel</button>
     </div>
+  </div>
 
-    <div class="sidebar-section">
-      <h2>Filter</h2>
-      <div class="field">
-        <label>Zeitraum</label>
-        <select id="days">
-          <option value="7">Letzte 7 Tage</option>
-          <option value="30" selected>Letzte 30 Tage</option>
-          <option value="90">Letzte 90 Tage</option>
-          <option value="180">Letzte 6 Monate</option>
-          <option value="365">Letztes Jahr</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Max. Ergebnisse gesamt</label>
-        <select id="maxres">
-          <option value="25">25</option>
-          <option value="50" selected>50</option>
-          <option value="100">100</option>
-          <option value="200">200</option>
-        </select>
-      </div>
+  <div class="content" id="content">
+    <div style="padding:60px;text-align:center;color:#999;font-size:13px">
+      Themen auswählen und Suche starten.
     </div>
-
-    <div class="sidebar-section">
-      <button class="btn btn-primary" id="search-btn" onclick="runSearch()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        Suche starten
-      </button>
-    </div>
-
-    <div class="api-info">
-      <strong>API:</strong> <a href="https://europepmc.org/RestfulWebService" target="_blank">Europe PMC</a><br>
-      Indexiert bioRxiv, medRxiv u.a. Preprint-Server in Echtzeit. Keine Registrierung nötig.
-    </div>
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <main class="main">
-    <div class="topbar">
-      <div class="topbar-left">
-        <span class="count-badge" id="count-badge">Noch keine Suche gestartet</span>
-      </div>
-      <div class="topbar-right">
-        <button class="btn btn-outline btn-sm" id="export-btn" onclick="exportXLSX()" style="display:none">
-          📥 Excel exportieren
-        </button>
-      </div>
-    </div>
-
-    <div class="content" id="content">
-      <div class="state-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
-        <p>Themen auswählen und <strong>Suche starten</strong> klicken.</p>
-      </div>
-    </div>
-  </main>
+  </div>
+</main>
 </div>
 
 <script>
-
 let allResults = [];
+let activeFilter = 'all';
 
-document.querySelectorAll('.chip').forEach(c => {
-  c.onclick = () => c.classList.toggle('on');
-});
+document.querySelectorAll('.chip').forEach(c => c.onclick = () => c.classList.toggle('on'));
 
 function getTerms(){
   const terms = [...document.querySelectorAll('#topics .chip.on')].map(c => c.dataset.val);
   const extra = document.getElementById('extra').value.trim();
-  if(extra){ extra.split(',').map(t=>t.trim()).filter(Boolean).forEach(t=>terms.push(t)); }
+  if(extra) extra.split(',').map(t=>t.trim()).filter(Boolean).forEach(t=>terms.push(t));
   return terms;
 }
 
@@ -229,74 +198,62 @@ function fromDate(days){
 }
 
 async function searchEuropePMC(term, rows){
-  const q =
-    `(TITLE:"${term}" OR ABSTRACT:"${term}") ` +
-    `AND (SRC:MED OR SRC:PMC OR SRC:PPR)`;
-  const url =
-    `https://www.ebi.ac.uk/europepmc/webservices/rest/search` +
-    `?query=${encodeURIComponent(q)}` +
-    `&format=json` +
-    `&pageSize=${rows}` +
-    `&resultType=core` +
-    `&sort=P_PDATE_D desc`;
+  const q = `(TITLE:"${term}" OR ABSTRACT:"${term}") AND (SRC:MED OR SRC:PMC OR SRC:PPR)`;
+  const url = `https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${encodeURIComponent(q)}&format=json&pageSize=${rows}&resultType=core&sort=P_PDATE_D desc`;
   try{
     const r = await fetch(url);
-    if(!r.ok){ throw new Error(`HTTP ${r.status}`); }
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
     const data = await r.json();
     return (data.resultList?.result || []).map(item => {
       const doi = item.doi || '';
 
-      // URL
+      // Direct URL
       let articleUrl = '';
       if(item.fullTextUrlList?.fullTextUrl?.length){
         const htmlLink = item.fullTextUrlList.fullTextUrl.find(u => u.documentStyle === 'html');
-        if(htmlLink?.url){ articleUrl = htmlLink.url; }
+        if(htmlLink?.url) articleUrl = htmlLink.url;
       }
       if(!articleUrl && doi){
-        if(doi.toLowerCase().includes('biorxiv')){ articleUrl = `https://www.biorxiv.org/content/${doi}`; }
-        else if(doi.toLowerCase().includes('medrxiv')){ articleUrl = `https://www.medrxiv.org/content/${doi}`; }
-        else{ articleUrl = `https://doi.org/${doi}`; }
+        if(doi.toLowerCase().includes('biorxiv')) articleUrl = `https://www.biorxiv.org/content/${doi}`;
+        else if(doi.toLowerCase().includes('medrxiv')) articleUrl = `https://www.medrxiv.org/content/${doi}`;
+        else articleUrl = `https://doi.org/${doi}`;
       }
 
       // Authors
       const authorList = item.authorList?.author || [];
-      const authors = authorList.slice(0,8).map(a => {
-        const last = a.lastName || '';
-        const init = a.initials || (a.firstName ? a.firstName[0] : '');
-        return `${last} ${init}`.trim();
-      }).filter(Boolean).join(', ') + (authorList.length > 8 ? ' et al.' : '');
+      const authors = authorList.slice(0,8).map(a => `${a.lastName||''} ${a.initials||''}`.trim()).filter(Boolean).join(', ') + (authorList.length > 8 ? ' et al.' : '');
 
-      // Corresponding author + email — scan all authors for email in affiliation
+      // Corresponding author + email — scan all authors
       let corrName = '', corrEmail = '';
       for(const a of authorList){
         const affs = a.authorAffiliationDetailsList?.authorAffiliation || [];
         for(const aff of affs){
-          const m = (aff.affiliation || '').match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
-          if(m){
-            corrEmail = m[0];
-            corrName = a.fullName || `${a.lastName || ''} ${a.initials || ''}`.trim();
-            break;
-          }
+          const m = (aff.affiliation||'').match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+          if(m){ corrEmail = m[0]; corrName = a.fullName || `${a.lastName||''} ${a.initials||''}`.trim(); break; }
         }
         if(corrEmail) break;
       }
       if(!corrName && authorList.length){
         const last = authorList[authorList.length-1];
-        corrName = last.fullName || `${last.lastName || ''} ${last.initials || ''}`.trim();
+        corrName = last.fullName || `${last.lastName||''} ${last.initials||''}`.trim();
       }
 
-      // Server
-      let server = 'Journal';
+      // Server / type detection
       const doiLower = doi.toLowerCase();
-      if(doiLower.includes('biorxiv')){ server = 'bioRxiv'; }
-      else if(doiLower.includes('medrxiv')){ server = 'medRxiv'; }
+      const pubType = (item.pubTypeList?.pubType || []).join(' ').toLowerCase();
+      const source = (item.source || '').toUpperCase();
+      let server = 'Journal';
+      if(doiLower.includes('biorxiv')) server = 'bioRxiv';
+      else if(doiLower.includes('medrxiv')) server = 'medRxiv';
+      else if(source === 'PPR') server = 'Preprint';
 
       return {
-        title: (item.title || '').replace(/<[^>]*>/g,'').trim(),
+        title: (item.title||'').replace(/<[^>]*>/g,'').trim(),
         authors, corrName, corrEmail, server, topic: term,
         date: item.firstPublicationDate || '',
         doi, url: articleUrl,
-        abstract: (item.abstractText || '').replace(/<[^>]*>/g,'').trim()
+        abstract: (item.abstractText||'').replace(/<[^>]*>/g,'').trim(),
+        isPreprint: server === 'bioRxiv' || server === 'medRxiv' || server === 'Preprint'
       };
     });
   }catch(e){
@@ -307,18 +264,18 @@ async function searchEuropePMC(term, rows){
 
 async function runSearch(){
   const terms = getTerms();
-  if(!terms.length){
-    setContent(`<div class="error">Bitte mindestens ein Thema auswählen.</div>`);
-    return;
-  }
+  if(!terms.length){ setContent(`<div class="error">Bitte mindestens ein Thema auswählen.</div>`); return; }
+
   const maxres = parseInt(document.getElementById('maxres').value);
   const days = parseInt(document.getElementById('days').value);
   const dateLimit = fromDate(days);
   const perTerm = Math.max(10, Math.ceil(maxres / terms.length));
 
   const btn = document.getElementById('search-btn');
-  btn.disabled = true;
-  btn.innerHTML = 'Suche läuft...';
+  btn.disabled = true; btn.innerHTML = 'Suche läuft...';
+  document.getElementById('filter-group').style.display = 'none';
+  document.getElementById('export-btn').style.display = 'none';
+  activeFilter = 'all';
 
   setContent(`<div class="progress"><div class="spinner"></div><div id="prog">Verbinde mit Europe PMC...</div></div>`);
 
@@ -327,45 +284,74 @@ async function runSearch(){
 
   for(let i=0;i<terms.length;i++){
     const progEl = document.getElementById('prog');
-    if(progEl){ progEl.textContent = `Suche "${terms[i]}" (${i+1}/${terms.length})`; }
+    if(progEl) progEl.textContent = `Suche "${terms[i]}" (${i+1}/${terms.length})`;
     const papers = await searchEuropePMC(terms[i], perTerm);
     for(const p of papers){
-      if(p.date && new Date(p.date) < dateLimit){ continue; }
+      if(p.date && new Date(p.date) < dateLimit) continue;
       const key = p.doi || p.title;
       if(key && !seen.has(key)){ seen.add(key); allResults.push(p); }
     }
   }
 
   allResults.sort((a,b) => b.date.localeCompare(a.date));
-  if(allResults.length > maxres){ allResults = allResults.slice(0,maxres); }
+  if(allResults.length > maxres) allResults = allResults.slice(0, maxres);
 
-  btn.disabled = false;
-  btn.innerHTML = 'Suche starten';
+  btn.disabled = false; btn.innerHTML = 'Suche starten';
+
+  // Reset filter buttons
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.className = 'filter-btn' + (b.dataset.filter === 'all' ? ' active' : '');
+  });
+  document.getElementById('filter-group').style.display = allResults.length ? 'flex' : 'none';
+
   renderResults();
 }
 
+function setFilter(f, btn){
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.className = 'filter-btn';
+  });
+  if(f === 'all') btn.className = 'filter-btn active';
+  else if(f === 'preprint') btn.className = 'filter-btn active-preprint';
+  else btn.className = 'filter-btn active-journal';
+  renderResults();
+}
+
+function getFiltered(){
+  if(activeFilter === 'preprint') return allResults.filter(p => p.isPreprint);
+  if(activeFilter === 'journal') return allResults.filter(p => !p.isPreprint);
+  return allResults;
+}
+
 function renderResults(){
-  if(!allResults.length){
-    document.getElementById('count-badge').textContent = 'Keine Treffer';
-    setContent(`<div class="error">Keine Artikel gefunden. Zeitraum verlängern oder andere Begriffe wählen.</div>`);
+  const results = getFiltered();
+
+  const preprints = allResults.filter(p => p.isPreprint).length;
+  const journals = allResults.length - preprints;
+  document.getElementById('count-badge').innerHTML =
+    `<strong>${allResults.length}</strong> Treffer &nbsp;·&nbsp; <span style="color:#d97706">🔬 ${preprints} Preprints</span> &nbsp;·&nbsp; <span style="color:var(--success)">📄 ${journals} Journals</span>`;
+
+  if(!results.length){
+    setContent(`<div class="error">Keine Treffer für diesen Filter.</div>`);
+    document.getElementById('export-btn').style.display = 'none';
     return;
   }
-  document.getElementById('count-badge').innerHTML = `<strong>${allResults.length}</strong> Artikel gefunden`;
   document.getElementById('export-btn').style.display = 'inline-block';
 
-  let html = `<div class="info">✓ ${allResults.length} Artikel gefunden — Klick auf Titel öffnet den Artikel direkt.</div>
-  <div style="overflow-x:auto"><table class="results-table"><thead><tr>
-    <th>Datum</th><th>Server</th><th>Thema</th><th>Titel</th><th>Autoren</th><th>Korr. Autor</th><th>Link</th>
-  </tr></thead><tbody>`;
+  let html = `<div class="info">✓ ${results.length} Artikel — Klick auf Titel öffnet den Artikel direkt.</div>
+  <div style="overflow-x:auto"><table class="results-table">
+  <thead><tr><th>Datum</th><th>Typ</th><th>Thema</th><th>Titel</th><th>Autoren</th><th>Korr. Autor</th><th>Link</th></tr></thead><tbody>`;
 
-  allResults.forEach(p => {
+  results.forEach(p => {
     let badge = '';
-    if(p.server==='bioRxiv'){ badge=`<span class="badge badge-biorxiv">bioRxiv</span>`; }
-    else if(p.server==='medRxiv'){ badge=`<span class="badge badge-medrxiv">medRxiv</span>`; }
-    else{ badge=`<span class="badge badge-journal">Journal</span>`; }
+    if(p.server==='bioRxiv') badge = `<span class="badge badge-biorxiv">bioRxiv</span>`;
+    else if(p.server==='medRxiv') badge = `<span class="badge badge-medrxiv">medRxiv</span>`;
+    else if(p.server==='Preprint') badge = `<span class="badge" style="background:#fff3e0;color:#92400e;border:1px solid #fcd34d">Preprint</span>`;
+    else badge = `<span class="badge badge-journal">Journal</span>`;
 
     const corr = p.corrEmail
-      ? `${p.corrName}<br><a href="mailto:${p.corrEmail}">${p.corrEmail}</a>`
+      ? `${p.corrName}<br><a href="mailto:${p.corrEmail}" style="color:var(--accent)">${p.corrEmail}</a>`
       : (p.corrName || '—');
 
     const linkCell = p.url
@@ -373,13 +359,13 @@ function renderResults(){
       : (p.doi || '—');
 
     html += `<tr>
-      <td style="white-space:nowrap">${p.date}</td>
+      <td style="white-space:nowrap;font-size:11px">${p.date}</td>
       <td>${badge}</td>
       <td><span class="badge badge-topic">${p.topic}</span></td>
       <td><a class="title-link" href="${p.url||'#'}" target="_blank">${p.title}</a></td>
-      <td style="font-size:11px">${p.authors||'—'}</td>
-      <td style="font-size:11px">${corr}</td>
-      <td style="font-size:11px;word-break:break-all">${linkCell}</td>
+      <td style="font-size:11px;max-width:200px">${p.authors||'—'}</td>
+      <td style="font-size:11px;max-width:160px">${corr}</td>
+      <td style="font-size:11px;word-break:break-all;max-width:180px">${linkCell}</td>
     </tr>`;
   });
 
@@ -387,24 +373,23 @@ function renderResults(){
   setContent(html);
 }
 
-function setContent(html){
-  document.getElementById('content').innerHTML = html;
-}
+function setContent(html){ document.getElementById('content').innerHTML = html; }
 
 function exportXLSX(){
-  if(!allResults.length) return;
-  const rows = allResults.map(p => ({
-    'Datum': p.date, 'Server': p.server, 'Thema': p.topic, 'Titel': p.title,
+  const results = getFiltered();
+  if(!results.length) return;
+  const rows = results.map(p => ({
+    'Datum': p.date, 'Typ': p.server, 'Thema': p.topic, 'Titel': p.title,
     'Autoren': p.authors, 'Korrespondierender Autor': p.corrName,
     'E-Mail': p.corrEmail, 'DOI': p.doi, 'Direktlink': p.url, 'Abstract': p.abstract
   }));
   const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [{wch:12},{wch:14},{wch:20},{wch:70},{wch:45},{wch:35},{wch:35},{wch:40},{wch:60},{wch:100}];
+  ws['!cols'] = [{wch:12},{wch:12},{wch:20},{wch:70},{wch:45},{wch:35},{wch:35},{wch:40},{wch:60},{wch:100}];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Papers');
-  XLSX.writeFile(wb, `DermPapers_${new Date().toISOString().split('T')[0]}.xlsx`);
+  const filterLabel = activeFilter === 'all' ? 'Alle' : activeFilter === 'preprint' ? 'Preprints' : 'Journals';
+  XLSX.writeFile(wb, `DermPapers_${filterLabel}_${new Date().toISOString().split('T')[0]}.xlsx`);
 }
-
 </script>
 </body>
 </html>
