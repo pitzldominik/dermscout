@@ -201,7 +201,7 @@ async function searchEuropePMC(term, rows){
   const q = `(TITLE:"${term}" OR ABSTRACT:"${term}") AND (SRC:MED OR SRC:PMC OR SRC:PPR)`;
   const url = `https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${encodeURIComponent(q)}&format=json&pageSize=${rows}&resultType=core&sort=P_PDATE_D desc`;
   try{
-    const r = await fetch(url);
+    const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
     if(!r.ok) throw new Error(`HTTP ${r.status}`);
     const data = await r.json();
     return (data.resultList?.result || []).map(item => {
@@ -239,13 +239,19 @@ async function searchEuropePMC(term, rows){
       }
 
       // Server / type detection
+      // Server detection — three independent signals, any one is enough
+      const source = (item.source || '').toUpperCase();           // 'PPR' = preprint
+      const pubTypes = (item.pubTypeList?.pubType || []).map(t => (t||'').toLowerCase());
+      const isPrePubType = pubTypes.some(t => t.includes('preprint'));
       const doiLower = doi.toLowerCase();
-      const pubType = (item.pubTypeList?.pubType || []).join(' ').toLowerCase();
-      const source = (item.source || '').toUpperCase();
+      const publisher = (item.bookOrReportDetails?.publisher || '').toLowerCase();
+
       let server = 'Journal';
-      if(doiLower.includes('biorxiv')) server = 'bioRxiv';
-      else if(doiLower.includes('medrxiv')) server = 'medRxiv';
-      else if(source === 'PPR') server = 'Preprint';
+      if(source === 'PPR' || isPrePubType){
+        if(doiLower.includes('biorxiv') || publisher.includes('biorxiv')) server = 'bioRxiv';
+        else if(doiLower.includes('medrxiv') || publisher.includes('medrxiv')) server = 'medRxiv';
+        else server = 'Preprint';
+      }
 
       return {
         title: (item.title||'').replace(/<[^>]*>/g,'').trim(),
